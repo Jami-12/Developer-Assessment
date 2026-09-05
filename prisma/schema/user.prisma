@@ -1,0 +1,35 @@
+model User {
+  id             String          @id @default(uuid()) @db.Uuid
+  email          String          @unique
+  password       String
+  role           UserRole
+  isDeleted      Boolean         @default(false)
+  deletedAt      DateTime?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  companyProfile CompanyProfile?
+  attempts       Attempt[]
+  auditLogs      AuditLog[]
+
+  @@index([role])
+  @@index([isDeleted])
+}
+
+model CompanyProfile {
+  id          String       @id @default(uuid()) @db.Uuid
+  companyName String
+  website     String?
+  credits     Int          @default(0)
+  userId      String       @unique @db.Uuid
+  isDeleted   Boolean      @default(false)
+  deletedAt   DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  user        User         @relation(fields: [userId], references: [id], onDelete: Restrict)
+  problems    Problem[]
+  assessments Assessment[]
+  payments    Payment[]
+
+  @@index([companyName])
+  @@index([isDeleted])
+}

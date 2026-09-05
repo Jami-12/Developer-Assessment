@@ -1,0 +1,21 @@
+model Problem {
+  id                 String              @id @default(uuid()) @db.Uuid
+  title              String
+  description        String
+  difficulty         ProblemDifficulty
+  type               ProblemType
+  testCases          Json
+  points             Int
+  companyId          String              @db.Uuid
+  isDeleted          Boolean             @default(false)
+  deletedAt          DateTime?
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  company            CompanyProfile      @relation(fields: [companyId], references: [id], onDelete: Restrict)
+  assessmentProblems AssessmentProblem[]
+  submissions        Submission[]
+
+  @@index([companyId])
+  @@index([difficulty, type])
+  @@index([isDeleted])
+}

@@ -1,0 +1,34 @@
+enum UserRole {
+  ADMIN
+  COMPANY
+  CANDIDATE
+}
+
+enum ProblemDifficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum ProblemType {
+  MCQ
+  CODING
+}
+
+enum InvitationStatus {
+  INVITED
+  STARTED
+  COMPLETED
+}
+
+enum AttemptStatus {
+  IN_PROGRESS
+  SUBMITTED
+  EXPIRED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}

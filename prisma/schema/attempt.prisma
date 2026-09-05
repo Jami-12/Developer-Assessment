@@ -1,0 +1,39 @@
+model Attempt {
+  id           String        @id @default(uuid()) @db.Uuid
+  candidateId  String        @db.Uuid
+  assessmentId String        @db.Uuid
+  invitationId String?       @db.Uuid
+  startTime    DateTime      @default(now())
+  endTime      DateTime?
+  status       AttemptStatus @default(IN_PROGRESS)
+  totalScore   Int           @default(0)
+  candidate    User          @relation(fields: [candidateId], references: [id], onDelete: Restrict)
+  assessment   Assessment    @relation(fields: [assessmentId], references: [id], onDelete: Restrict)
+  invitation   Invitation?   @relation(fields: [invitationId], references: [id], onDelete: SetNull)
+  submissions  Submission[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  deletedAt    DateTime?
+
+  @@index([candidateId])
+  @@index([assessmentId])
+  @@index([invitationId])
+  @@index([status])
+}
+
+model Submission {
+  id                    String    @id @default(uuid()) @db.Uuid
+  attemptId             String    @db.Uuid
+  problemId             String    @db.Uuid
+  submittedCodeOrAnswer String
+  isCorrect             Boolean?
+  marksObtained         Int       @default(0)
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  deletedAt             DateTime?
+  attempt               Attempt   @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  problem               Problem   @relation(fields: [problemId], references: [id], onDelete: Restrict)
+
+  @@unique([attemptId, problemId])
+  @@index([problemId])
+}
