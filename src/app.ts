@@ -28,7 +28,7 @@ app.use("/api/v1", apiRoutes);
 app.get("/", (_req, res) => {
   res.status(httpStatus.OK).json({
     success: true,
-    message: "Welcome to PH Healthcare System Backend",
+    message: "Welcome to Developer Assessment Platform",
   });
 });
 
