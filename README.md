@@ -1,54 +1,67 @@
-# Developer Assessment Platform API
+# 🚀 Developer Assessment & Coding Platform API
 
-Backend for a developer assessment and coding platform built with Node.js, Express, TypeScript, Prisma 5.22, and PostgreSQL.
+A robust, enterprise-grade backend for a **Developer Assessment Platform** (similar to HackerRank or Byteboard). Built with Node.js, Express.js, TypeScript, Prisma ORM (v5.22), and PostgreSQL. 
 
-## Features
+The system enables companies to create assessments, invite candidates, evaluate coding/MCQ problems, and track performance with transactional credit top-ups, automated scoring, and comprehensive audit logs.
 
-- JWT authentication with company, candidate, and admin roles
-- Company-owned MCQ and coding problems
-- Assessments, problem links, and candidate invitations
-- Timed candidate attempts and automatic scoring
-- Transactional company credit top-ups
-- Soft deletes and audit logs
-- Platform metrics for administrators
+---
 
-## Requirements
+## 🔗 Submission Links
 
-- Node.js 20+
-- PostgreSQL
-- Redis
-- npm
+* **Live API Base URL:** `https://your-app-name.onrender.com/api/v1`
+* **Postman API Documentation:** `https://documenter.getpostman.com/view/YOUR_POSTMAN_DOCUMENTATION_LINK`
+* **Video Walkthrough (3-5 mins):** `https://loom.com/share/YOUR_VIDEO_LINK`
+* **ERD Diagram:** `https://your-erd-image-link.png`
 
-## Installation
+---
 
+## 🔑 Demo Credentials for Testing
+
+| Role | Email | Password |
+| :--- | :--- | :--- |
+| **ADMIN** | `admin@example.com` | `Password123!` |
+| **COMPANY** | `company@example.com` | `Password123!` |
+| **CANDIDATE** | `candidate@example.com` | `Password123!` |
+
+---
+
+## ✨ Key Features & Architecture Highlights
+
+### 🛡️ Core Capabilities
+* **Role-Based Access Control (RBAC):** Distinct permissions and workflows for `ADMIN`, `COMPANY`, and `CANDIDATE`.
+* **Multi-File Schema Architecture:** Uses Prisma `previewFeatures = ["prismaSchemaFolder"]` to organize database schemas logically by domain.
+* **Timed Assessment & Auto-Scoring:** Strict timer verification for candidates with atomic scoring during attempt submission.
+* **Transactional Credit System:** Managed top-ups updating company balances securely via Prisma `$transaction`.
+* **Data Integrity & Compliance:** Integrated soft-deletes (`isDeleted`, `deletedAt`) across models and detailed platform `AuditLog` history.
+
+### 🛠️ Advanced Engineering Patterns
+* **Centralized Error Handling:** Custom `AppError` class with standard error response structure and Zod schema validation formatting.
+* **Reusable QueryBuilder:** Global utility for server-side pagination, searching, sorting, and dynamic filtering.
+* **Global Response Handler:** Unified `sendResponse` utility ensuring JSON standardization (`success`, `statusCode`, `message`, `data`).
+
+---
+
+## 💻 Tech Stack
+
+* **Language:** TypeScript
+* **Runtime:** Node.js (v20+)
+* **Framework:** Express.js
+* **Database & ORM:** PostgreSQL (Neon / Supabase), Prisma ORM v5.22.0
+* **Authentication:** JWT (JSON Web Tokens), Bcrypt.js
+* **Validation:** Zod Schema Validation
+* **Caching & Services:** Redis, Multer, Cloudinary, Nodemailer
+
+---
+
+## 🚦 Local Setup Instructions
+
+### Prerequisites
+* Node.js v20 or higher
+* PostgreSQL Database URL
+* Redis Server (Local or Cloud instance)
+
+### Step 1: Clone Repository & Install Dependencies
 ```bash
+git clone [https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git](https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git)
+cd server
 npm install
-copy .env.example .env
-npx prisma generate --schema prisma/schema
-npx prisma migrate dev --name init --schema prisma/schema
-npm run dev
-```
-
-The default API URL is `http://localhost:5000/api/v1`.
-
-Configure the values in `.env` before starting the server. PostgreSQL, Redis, and SMTP settings are required by the current startup process.
-
-## Commands
-
-```bash
-npm run dev
-npm run build
-npm run lint:check
-npm run format:fix
-npx prisma validate --schema prisma/schema
-```
-
-## API Testing
-
-Import the collection below into Postman:
-
-[postman/Developer-Assessment-Platform.postman_collection.json](postman/Developer-Assessment-Platform.postman_collection.json)
-
-Detailed Postman instructions, request payloads, variables, and response examples are documented here:
-
-[POSTMAN.md](POSTMAN.md)

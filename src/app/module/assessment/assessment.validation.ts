@@ -1,22 +1,29 @@
 import { z } from "zod";
-const assessment = z.object({
-  title: z.string().min(1),
+
+const assessmentSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+
   description: z.string().optional(),
-  durationMinutes: z.number().int().positive(),
-  passMarks: z.number().int().nonnegative(),
+
+  durationMinutes: z.number().int().positive("Duration must be greater than 0"),
+
+  passMarks: z.number().int().nonnegative("Pass marks cannot be negative"),
+
   problems: z
     .array(
       z.object({
-        problemId: z.string().uuid(),
-        marks: z.number().int().positive(),
+        problemId: z.string().uuid("Invalid problem ID"),
+
+        marks: z.number().int().positive("Marks must be greater than 0"),
       }),
     )
-    .min(1),
+    .min(1, "At least one problem is required"),
 });
-export const createAssessmentValidation = z.object({ body: assessment });
-export const updateAssessmentValidation = z.object({
-  body: assessment.partial(),
-});
+
+export const createAssessmentValidation = assessmentSchema;
+
+export const updateAssessmentValidation = assessmentSchema.partial();
+
 export const invitationValidation = z.object({
-  body: z.object({ candidateEmail: z.string().email() }),
+  candidateEmail: z.string().email("Invalid candidate email"),
 });

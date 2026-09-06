@@ -1,28 +1,31 @@
 import type { NextFunction, Request, Response } from "express";
 import httpStatus from "http-status";
-import type z from "zod";
+import type { ZodObject } from "zod";
+
 import { AppError } from "../utils/AppError";
 import { catchAsync } from "../utils/catchAsync";
 
-export const validateRequest = (zodSchema: z.ZodObject) => {
-  return catchAsync((req: Request, res: Response, next: NextFunction) => {
-    // const payload = req.body ? req.body : {}
-    const payload = req.body ?? {};
+export const validateRequest = (zodSchema: ZodObject) => {
+  return catchAsync(
+    async (req: Request, _res: Response, next: NextFunction) => {
+      const result = zodSchema.safeParse({
+        body: req.body,
+        params: req.params,
+        query: req.query,
+      });
 
-    const result = zodSchema.safeParse(payload);
+      if (!result.success) {
+        console.log("ZOD ERROR:", result.error.issues);
 
-    if (!result.success) {
-      console.log(result.error);
-      console.log(result.error.issues);
+        throw new AppError(
+          httpStatus.BAD_REQUEST,
+          result.error.issues[0]?.message || "Invalid request",
+        );
+      }
 
-      throw new AppError(
-        httpStatus.BAD_REQUEST,
-        result.error.issues[0].message,
-      );
-    }
+      req.body = result.data.body;
 
-    req.body = result.data;
-
-    next();
-  });
+      next();
+    },
+  );
 };
